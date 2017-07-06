@@ -85,6 +85,9 @@ Options to exclude certain paths from hits recording:
    python3 manage.py collect
    ```
 
+Note: the collector uses a Go module: it will work on Linux. For other systems you would have to compile it
+from [the source](https://github.com/synw/django-watchtower/tree/master/watchtower/collector/src)
+
 # Todo
 
 - [ ] Grafana dashboard
