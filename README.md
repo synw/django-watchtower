@@ -88,6 +88,18 @@ Options to exclude certain paths from hits recording:
 Note: the collector uses a Go module: it will work on Linux. For other systems you would have to compile it
 from [the source](https://github.com/synw/django-watchtower/tree/master/watchtower/collector/src)
 
+# Visualization dashboards
+
+[Grafana dashboards](https://github.com/synw/django-watchtower/tree/master/dashboards) are available: the overview dashboard:
+
+![Overview dashboard](https://github.com/synw/django-watchtower/raw/master/doc/img/overview.png)
+
+The queries dashboard:
+
+![Queries dashboard](https://github.com/synw/django-watchtower/raw/master/doc/img/queries.png)
+
+Note: this is work in progress and some numbers in the dashboards might be innacurate
+
 # Todo
 
-- [ ] Grafana dashboard
+- [ ] More dashboards
