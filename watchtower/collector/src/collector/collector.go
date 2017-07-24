@@ -25,12 +25,12 @@ func ProcessData(domain string, db *types.Db, separator string, verbosity int) *
 	var mutex = &sync.Mutex{}
 	tr := processHits(domain, db, separator, mutex, verbosity)
 	if tr != nil {
-		tr := terr.Pass("collector.connect", tr)
+		tr := terr.Pass("collector.ProcessData", tr)
 		return tr
 	}
 	tr = processEvents(domain, db, separator, mutex, verbosity)
 	if tr != nil {
-		tr := terr.Pass("collector.connect", tr)
+		tr := terr.Pass("collector.ProcessData", tr)
 		return tr
 	}
 	return nil

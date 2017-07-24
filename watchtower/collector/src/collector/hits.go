@@ -1,6 +1,7 @@
 package collector
 
 import (
+	"fmt"
 	"github.com/garyburd/redigo/redis"
 	"github.com/synw/terr"
 	influxdb "github.com/synw/watchtower/db"
@@ -11,7 +12,7 @@ import (
 
 func processHits(domain string, db *types.Db, separator string, mutex *sync.Mutex, verbosity int) *terr.Trace {
 	// get hits set
-	prefix := domain + "_hit*"
+	prefix := domain + "*_hit*"
 	keys, err := redis.Values(conn.Do("KEYS", prefix))
 	if err != nil {
 		tr := terr.New("db.hits.ProcessHits", err)
@@ -20,6 +21,9 @@ func processHits(domain string, db *types.Db, separator string, mutex *sync.Mute
 	var args []interface{}
 	for _, k := range keys {
 		args = append(args, k)
+	}
+	if verbosity > 2 {
+		fmt.Println("Found", len(keys), "keys", keys)
 	}
 	if len(keys) > 0 {
 		values, err := redis.Strings(conn.Do("MGET", args...))

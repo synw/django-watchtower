@@ -11,10 +11,10 @@ import (
 
 var cli client.Client
 
-func Init(db *types.Db) *terr.Trace {
+func Init(db *types.Db, verbosity int) *terr.Trace {
 	var err error
 	// influxdb
-	addr := "http://" + db.Addr
+	addr := db.Addr
 	cli, err = client.NewHTTPClient(client.HTTPConfig{
 		Addr:     addr,
 		Username: db.User,
@@ -23,6 +23,18 @@ func Init(db *types.Db) *terr.Trace {
 	if err != nil {
 		tr := terr.New("db.Init", err)
 		return tr
+	}
+	// ping db
+	if verbosity > 0 {
+		fmt.Println("Initializing the database at", db.Addr+"...")
+	}
+	_, _, err = cli.Ping(1)
+	if err != nil {
+		tr := terr.New("db.Init", err)
+		return tr
+	}
+	if verbosity > 0 {
+		fmt.Println("The database is ready")
 	}
 	return nil
 }
@@ -77,11 +89,15 @@ func SaveEvents(db *types.Db, events []*types.Event, domain string, mutex *sync.
 	mutex.Unlock()
 	// metrics
 	t2 := time.Since(t1)
-	if verbosity > 1 {
+	if verbosity > 0 {
+		t := time.Now()
+		strt := t.Format("15:04:05")
 		if num > 0 {
-			t := time.Now()
-			strt := t.Format("15:04:05")
 			fmt.Println(strt, "Saved", num, "events in the database in", t2)
+		} else {
+			if verbosity > 1 {
+				fmt.Println(strt, "No events", t2)
+			}
 		}
 	}
 	return num, nil
@@ -135,18 +151,31 @@ func SaveHits(db *types.Db, hits []*types.Hit, mutex *sync.Mutex, verbosity int)
 	}
 	// Write the batch
 	mutex.Lock()
-	if err := cli.Write(bp); err != nil {
+	fmt.Println("WR")
+	err = cli.Write(bp)
+	fmt.Println("WR OK")
+	if err != nil {
 		tr := terr.New("db.SaveHits", err)
+		fmt.Println("SAVE ERR")
+		tr.Print()
 		return 0, tr
+	} else {
+		fmt.Println(verbosity, "SAVE", db.Addr)
 	}
+	fmt.Println("END")
+
 	mutex.Unlock()
 	// metrics
 	t2 := time.Since(t1)
-	if verbosity > 1 {
+	if verbosity > 0 {
+		t := time.Now()
+		strt := t.Format("15:04:05")
 		if num > 0 {
-			t := time.Now()
-			strt := t.Format("15:04:05")
 			fmt.Println(strt, "Saved", num, "hits in the database in", t2)
+		} else {
+			if verbosity > 1 {
+				fmt.Println(strt, "No hits", t2)
+			}
 		}
 	}
 	return num, nil

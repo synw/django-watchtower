@@ -11,7 +11,7 @@ import (
 
 func processEvents(domain string, db *types.Db, separator string, mutex *sync.Mutex, verbosity int) *terr.Trace {
 	// get hits set
-	prefix := domain + "_event*"
+	prefix := domain + "*_event*"
 	keys, err := redis.Values(conn.Do("KEYS", prefix))
 	if err != nil {
 		tr := terr.New("collector.events.processEvents", err)
