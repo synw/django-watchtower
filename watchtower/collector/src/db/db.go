@@ -151,19 +151,12 @@ func SaveHits(db *types.Db, hits []*types.Hit, mutex *sync.Mutex, verbosity int)
 	}
 	// Write the batch
 	mutex.Lock()
-	fmt.Println("WR")
 	err = cli.Write(bp)
-	fmt.Println("WR OK")
 	if err != nil {
 		tr := terr.New("db.SaveHits", err)
-		fmt.Println("SAVE ERR")
 		tr.Print()
 		return 0, tr
-	} else {
-		fmt.Println(verbosity, "SAVE", db.Addr)
 	}
-	fmt.Println("END")
-
 	mutex.Unlock()
 	// metrics
 	t2 := time.Since(t1)
