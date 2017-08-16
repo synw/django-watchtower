@@ -120,9 +120,9 @@ Do not use in production: it will not work when DEBUG is False
    {
     "site": "mysite",
     "user": "admin",
-    "request_time": "35",
-    "status_code": "200",
-    "doc_size": "3912",
+    "request_time": 35,
+    "status_code": 200,
+    "doc_size": 3912,
     "ip": "127.0.0.1",
     "user_agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0",
     "method": "GET",
@@ -156,8 +156,8 @@ Do not use in production: it will not work when DEBUG is False
     "is_staff": true,
     "referer": "",
     "path": "/",
-    "queries_time": "2",
-    "num_queries": "1"
+    "queries_time": 2,
+    "num_queries": 1
    }
    ```
 
