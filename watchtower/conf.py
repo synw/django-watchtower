@@ -22,6 +22,8 @@ STOP = getattr(settings, 'WT_STOP', False)
 
 EXCLUDE = getattr(settings, 'WT_EXCLUDE', [])
 
+COLLECTOR = getattr(settings, 'WT_COLLECTOR', True)
+
 DBS = getattr(settings, 'WT_DATABASES', None)
 if DBS is None:
     raise ImproperlyConfigured("Please configure a database for Watchtower")

@@ -2,8 +2,6 @@
 
 import time
 import json
-from threading import Thread
-from django.db import transaction
 from watchtower.models import Hit
 from watchtower.conf import VERBOSITY
 
@@ -17,7 +15,6 @@ def convertBool(val):
         return False
 
 
-@transaction.atomic
 def write(db, hits):
     global VERBOSITY
     i = len(hits)

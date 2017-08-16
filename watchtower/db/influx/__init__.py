@@ -69,5 +69,4 @@ def write(hits):
             }
         }
         points.append(data)
-    thread = Thread(target=write_points, args=(points,))
-    thread.start()
+    write_points(points)

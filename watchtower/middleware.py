@@ -3,18 +3,17 @@
 import inspect
 import time
 import redis
+from threading import Thread
 from django.db import connection
+from django.core.exceptions import ImproperlyConfigured
+from watchtower.db import dispatch
 from watchtower import serializer, conf as CONF
 try:
     from django.utils.deprecation import MiddlewareMixin
 except ImportError:
     MiddlewareMixin = object
 
-"""
-if CONF.INFLUX is not None:
-    from watchtower.db.influx import InfluxWrite
-else:
-"""
+
 R = redis.StrictRedis(
     host=CONF.REDIS["host"], port=CONF.REDIS["port"], db=CONF.REDIS["db"])
 
@@ -111,11 +110,16 @@ class HitsMiddleware(MiddlewareMixin):
             "device": request.user_agent.device.family,
         }
         data["ua"] = ua
-        hit = serializer.pack(data)
         name = CONF.SITE_SLUG + "_hit" + str(self.hitnum)
-        # if CONF.INFLUX is None:
-        R.set(name, hit)
-        # else:
-        #    influx_write(data)
+        if CONF.COLLECTOR is True:
+            if settings.DEBUG is False:
+                raise ImproperlyConfigured(
+                    "Watchtower: please use the collector when DEBUG is False")
+            hit = serializer.pack(data)
+            R.set(name, hit)
+        else:
+            data["geo"] = serializer.getGeoData(data['ip'])
+            thread = Thread(target=dispatch, args=([data],))
+            thread.start()
         self.hitnum += 1
         return response

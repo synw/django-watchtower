@@ -48,10 +48,11 @@ Add to installed apps:
    "watchtower",
    ```
 
-Add the middleware:
+Add the middlewares:
 
    ```python
    MIDDLEWARE_CLASSES = (
+    'django_user_agents.middleware.UserAgentMiddleware',
     'watchtower.middleware.HitsMiddleware',
     # ... other middlewares
    )
@@ -103,6 +104,14 @@ Options to exclude certain paths from hits recording:
    ```python
    python3 manage.py collect
    ```
+
+Note: it is possible to save the data directly into the database not using Redis and the collector with the setting:
+
+   ```python
+   WT_COLLECTOR = False
+   ```
+
+Do not use in production
 
 # Collected data
 

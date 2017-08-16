@@ -37,6 +37,22 @@ def pack(data):
     return hit
 
 
+def getGeoData(ip):
+    geo = {
+        "latitude": 0,
+        "country_name": "",
+        "longitude": 0,
+        "postal_code": "",
+        "dma_code": "",
+        "city": "",
+        "country_code": "",
+        "region": ""
+    }
+    if ip.startswith("127.") is False and ip.startswith("192.") is False:
+        geo = G.city(ip)
+    return geo
+
+
 def decodeRow(row):
     global SEPARATOR
     global G
@@ -62,17 +78,5 @@ def decodeRow(row):
     data["queries_time"] = vals[17]
     data["ua"] = json.loads(vals[18])
     # geo data
-    geo = {
-        "latitude": 0,
-        "country_name": "",
-        "longitude": 0,
-        "postal_code": "",
-        "dma_code": "",
-        "city": "",
-        "country_code": "",
-        "region": ""
-    }
-    if data["ip"].startswith("127.") is False and data["ip"].startswith("192.") is False:
-        geo = G.city(data["ip"])
-    data["geo"] = geo
+    data["geo"] = getGeoData(data["ip"])
     return data
