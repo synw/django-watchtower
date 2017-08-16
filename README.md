@@ -2,13 +2,14 @@
 
 Collect metrics and events from Django.
 
-How it works: numbers taken out from Django are stored in Redis and a collector saves them in 
-a database
+How it works: numbers taken out from Django are stored in Redis and a collector saves them in some
+database(s)
 
 **Metrics**: each hit is saved with fields ip, request time, query time, user_agent, geographical information and 
 [more](#collected-data)
 
-**Events**: logs, actions on registered models and user defined events are stored
+**Events**: logs, actions on registered models and user defined events are stored 
+(with [django-mqueue](https://github.com/synw/django-mqueue))
 
 ## Supported databases
 
@@ -71,7 +72,7 @@ Add to settings.py:
    WT_DATABASES = {
     "default": {
         "type": "django",
-        "hits_db": "hits" # name of the DATABASE
+        "hits_db": "hits" # name of a DATABASE in settings
     },
     "timeseries": {
         "type": "influxdb",
