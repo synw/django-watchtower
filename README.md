@@ -3,40 +3,47 @@
 Collect metrics and events from Django.
 
 How it works: numbers taken out from Django are stored in Redis and a collector saves them in 
-Influxdb at a regular interval and cleans the Redis keys 
+a database
 
-**Metrics**: each hit is saved with fields ip, request time, query time, user_agent, method, referer, user, view, module and more
+**Metrics**: each hit is saved with fields ip, request time, query time, user_agent, geographical information and 
+[more](#collected-data)
 
 **Events**: logs, actions on registered models and user defined events are stored
 
-## Dependencies
+## Supported databases
 
-- [Redis](https://redis.io/): the in-memory k/v store
-- [Influxdb](https://www.influxdata.com/): timeseries database
-- [Django Hitsmon](https://github.com/synw/django-mqueue): to produce hits and metrics
-- [Django Mqueue](https://github.com/synw/django-hitsmon): to produce events
+- [x] Django databases
+- [x] Influxdb
+- [ ] Rethinkdb
 
 ## Install
 
-Install django-mqueue and the redis drivers:
+Install the GeoIp tools:
 
    ```bash
-   pip install redis django-mqueue
+   cd /my/geo/folder
+   wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+   wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
+   ```
+   
+Unzip and add to settings.py:
+
+   ```python
+   GEOIP_PATH = "/my/geo/folder"
+   ```
+
+Install the dependencies: 
+
+   ```bash
+   pip install redis influxdb django-user-agents django-mqueue
    ```
 
 [Configure mqueue](http://django-mqueue.readthedocs.io/en/latest/usage/registered_models.html) to record what you want
-
-Install django-hitsmon (not yet on pip):
-
-   ```bash
-   pip install git+git://github.com/synw/django-hitsmon
-   ```
 
 Add to installed apps:
 
    ```python
    "mqueue",
-   "hitsmon",
    "watchtower",
    ```
 
@@ -44,13 +51,14 @@ Add the middleware:
 
    ```python
    MIDDLEWARE_CLASSES = (
-    'hitsmon.middleware.HitsMiddleware',
+    'watchtower.middleware.HitsMiddleware',
     # ... other middlewares
    )
    ```
 
 Add to settings.py:
    ```python
+   # to pipe events into watchtower
    MQUEUE_HOOKS = {
     "redis": {
         "path": "mqueue.hooks.redis",
@@ -59,13 +67,23 @@ Add to settings.py:
         "db": 0,
     }
    }
-   WT_INFLUX = {
-    "addr": "localhost:8086",
-    "user": "admin",
-    "password": "pwd",
-    "hits_db": "hits",
-    "events_db": "events",
+   # declare the databases
+   WT_DATABASES = {
+    "default": {
+        "type": "django",
+        "hits_db": "hits" # name of the DATABASE
+    },
+    "timeseries": {
+        "type": "influxdb",
+        "host": "localhost",
+        "port": 8086,
+        "user": "admin",
+        "password": "admin",
+        "hits_db": "hits",
+        "events_db": "events",
+    }
    }
+   # defaults:
    WT_REDIS = {
     "addr": "localhost:6379",
     "db": 0
@@ -77,7 +95,7 @@ Create your Influxdb databases for hits and events
 Options to exclude certain paths from hits recording:
 
    ```python
-   HITSMON_EXCLUDE = ("/path/not/recorded/",)
+   WT_EXCLUDE = ("/path/not/recorded/",)
    ```
 # Run the collector
 
@@ -85,8 +103,52 @@ Options to exclude certain paths from hits recording:
    python3 manage.py collect
    ```
 
-Note: the collector uses a Go module: it will work on Linux. For other systems you would have to compile it
-from [the source](https://github.com/synw/django-watchtower/tree/master/watchtower/collector/src)
+# Collected data
+
+   ```javascript
+   {
+    "site": "mysite",
+    "user": "admin",
+    "request_time": "35",
+    "status_code": "200",
+    "doc_size": "3912",
+    "ip": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0",
+    "method": "GET",
+    "view": "AddPostView",
+    "module": "qcf.views",
+    "is_superuser": "true",
+    "is_authenticated": "true",
+    "reason_phrase": "OK",
+    "ua": {
+     "os_version": "",
+     "is_pc": true,
+     "browser_version": "55.0",
+     "is_mobile": false,
+     "os": "Ubuntu",
+     "is_tablet": false,
+     "is_bot": false,
+     "device": "Other",
+     "is_touch": false,
+     "browser": "Firefox"
+    },
+    "geo": {
+     "latitude": 0,
+     "postal_code": "",
+     "country_code": "",
+     "region": "",
+     "dma_code": "",
+     "country_name": "",
+     "longitude": 0,
+     "city": ""
+    },
+    "is_staff": "true",
+    "referer": "",
+    "path": "/",
+    "queries_time": "2",
+    "num_queries": "1"
+   }
+   ```
 
 # Visualization dashboards
 
