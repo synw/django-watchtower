@@ -127,8 +127,8 @@ Do not use in production: it will not work when DEBUG is False
     "method": "GET",
     "view": "AddPostView",
     "module": "qcf.views",
-    "is_superuser": "true",
-    "is_authenticated": "true",
+    "is_superuser": true,
+    "is_authenticated": true,
     "reason_phrase": "OK",
     "ua": {
      "os_version": "",
@@ -152,7 +152,7 @@ Do not use in production: it will not work when DEBUG is False
      "longitude": 0,
      "city": ""
     },
-    "is_staff": "true",
+    "is_staff": true,
     "referer": "",
     "path": "/",
     "queries_time": "2",
