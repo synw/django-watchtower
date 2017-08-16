@@ -44,6 +44,7 @@ Install the dependencies:
 Add to installed apps:
 
    ```python
+   "django_user_agents",
    "mqueue",
    "watchtower",
    ```
