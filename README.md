@@ -111,7 +111,7 @@ Note: it is possible to save the data directly into the database not using Redis
    WT_COLLECTOR = False
    ```
 
-Do not use in production
+Do not use in production: it will not work when DEBUG is False
 
 # Collected data
 
