@@ -58,9 +58,4 @@ def write(db, hits):
         )
         hit_objs.append(hit_obj)
     Hit.objects.using(db).bulk_create(hit_objs)
-    if i > 0 and VERBOSITY > 0:
-        s = "s"
-        if i == 1:
-            s = ""
-        t = time.strftime('%X')
-        print(t, ":", "processed", i, "hit" + s)
+    return i

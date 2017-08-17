@@ -5,7 +5,6 @@ import time
 import redis
 from threading import Thread
 from django.db import connection
-from django.core.exceptions import ImproperlyConfigured
 from watchtower.db import dispatch
 from watchtower import serializer, conf as CONF
 try:
@@ -17,9 +16,10 @@ except ImportError:
 R = redis.StrictRedis(
     host=CONF.REDIS["host"], port=CONF.REDIS["port"], db=CONF.REDIS["db"])
 
+HITNUM = int(time.time())
+
 
 class HitsMiddleware(MiddlewareMixin):
-    hitnum = 0
 
     def process_view(self, request, view_func, *args, **kwargs):
         global CONF
@@ -40,7 +40,7 @@ class HitsMiddleware(MiddlewareMixin):
 
     def process_response(self, request, response):
         global CONF
-        global influx_write
+        global HITNUM
         if CONF.STOP:
             return response
         data = {}
@@ -110,16 +110,13 @@ class HitsMiddleware(MiddlewareMixin):
             "device": request.user_agent.device.family,
         }
         data["ua"] = ua
-        name = CONF.SITE_SLUG + "_hit" + str(self.hitnum)
+        name = CONF.SITE_SLUG + "_hit" + str(HITNUM)
         if CONF.COLLECTOR is True:
-            if settings.DEBUG is False:
-                raise ImproperlyConfigured(
-                    "Watchtower: please use the collector when DEBUG is False")
             hit = serializer.pack(data)
             R.set(name, hit)
         else:
             data["geo"] = serializer.getGeoData(data['ip'])
             thread = Thread(target=dispatch, args=([data],))
             thread.start()
-        self.hitnum += 1
+        HITNUM += 1
         return response

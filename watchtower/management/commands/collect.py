@@ -5,7 +5,7 @@ import time
 import redis
 from django.core.management.base import BaseCommand
 from watchtower.db import dispatch
-from watchtower.db.redis import getHits
+from watchtower.db.redis import getHits, getEvents
 from watchtower.conf import FREQUENCY, VERBOSITY
 
 
@@ -20,5 +20,6 @@ class Command(BaseCommand):
         r = redis.Redis(host='localhost', port=6379, db=0)
         while True:
             hits = getHits(r)
-            dispatch(hits)
+            events = getEvents(r)
+            dispatch(hits, events)
             time.sleep(FREQUENCY)

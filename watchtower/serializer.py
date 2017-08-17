@@ -53,7 +53,19 @@ def getGeoData(ip):
     return geo
 
 
-def decodeRow(row):
+def decodeEventRow(row):
+    global SEPARATOR
+    row = row.decode("utf-8")
+    event = {}
+    for el in row.split(SEPARATOR):
+        t = el.split(":;")
+        k = t[0]
+        v = t[1]
+        event[k] = v
+    return event
+
+
+def decodeHitRow(row):
     global SEPARATOR
     global G
     vals = row.decode().split(SEPARATOR)
@@ -70,12 +82,12 @@ def decodeRow(row):
     data["referer"] = vals[9]
     data["view"] = vals[10]
     data["module"] = vals[11]
-    data["status_code"] = vals[12]
+    data["status_code"] = int(vals[12])
     data["reason_phrase"] = vals[13]
-    data["request_time"] = vals[14]
-    data["doc_size"] = vals[15]
-    data["num_queries"] = vals[16]
-    data["queries_time"] = vals[17]
+    data["request_time"] = int(vals[14])
+    data["doc_size"] = int(vals[15])
+    data["num_queries"] = int(vals[16])
+    data["queries_time"] = int(vals[17])
     data["ua"] = json.loads(vals[18])
     # geo data
     data["geo"] = getGeoData(data["ip"])
