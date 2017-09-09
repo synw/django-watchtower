@@ -22,7 +22,7 @@ def dispatch(hits, events=None):
                 influx.process_hits(hits)
                 if events is not None:
                     influx.process_events(events)
-                print_summary(num_events=len(events))
+                    print_summary(num_events=len(events))
     print_summary(num_hits=len(hits))
 
 
