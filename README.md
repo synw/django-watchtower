@@ -58,6 +58,23 @@ Add the middlewares:
     # ... other middlewares
    )
    ```
+   
+Set the Django databases:
+
+   ```python
+   DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'hits': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'hits.sqlite3'),
+    }
+   }
+
+   DATABASE_ROUTERS = ['watchtower.router.HitsRouter']
+   ```
 
 Add to settings.py:
    ```python
@@ -70,12 +87,14 @@ Add to settings.py:
         "db": 0,
     }
    }
-   # declare the databases
+   # set the databases to use
    WT_DATABASES = {
+    # required
     "default": {
         "type": "django",
         "hits_db": "hits" # name of a DATABASE in settings
     },
+    # optional: more databases
     "timeseries": {
         "type": "influxdb",
         "host": "localhost",
@@ -93,7 +112,7 @@ Add to settings.py:
    }
    ```
 
-Create your Influxdb databases for hits and events
+Create your Influxdb databases for hits and events if needed
 
 Options to exclude certain paths from hits recording:
 
