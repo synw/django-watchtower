@@ -89,7 +89,7 @@ Add to settings.py:
    }
    # set the databases to use
    WT_DATABASES = {
-    # required
+    # required: at least one database
     "default": {
         "type": "django",
         "hits_db": "hits" # name of a DATABASE in settings
@@ -131,7 +131,7 @@ Note: it is possible to save the data directly into the database not using Redis
    WT_COLLECTOR = False
    ```
 
-Do not use in production: it will not work when DEBUG is False
+Do not use in production: it will not work when `DEBUG` is `False`
 
 # Collected data
 
