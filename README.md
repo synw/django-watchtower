@@ -160,20 +160,3 @@ Do not use in production: it will not work when DEBUG is False
     "num_queries": 1
    }
    ```
-
-# Visualization dashboards
-
-[Grafana dashboards](https://github.com/synw/django-watchtower/tree/master/dashboards) are available: the overview dashboard:
-
-![Overview dashboard](https://github.com/synw/django-watchtower/raw/master/doc/img/overview.png)
-
-The queries dashboard:
-
-![Queries dashboard](https://github.com/synw/django-watchtower/raw/master/doc/img/queries.png)
-
-Note: this is work in progress and some numbers in the dashboards are not acurate due to my lack of knowledge on how to query
-data in an appropriate maner in Grafana. Help is welcome here.
-
-# Todo
-
-- [ ] More dashboards
