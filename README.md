@@ -78,6 +78,10 @@ Set the Django databases:
 
 Add to settings.py:
    ```python
+   
+   # required
+   SITE_SLUG = "mysite"
+   
    # to pipe events into watchtower
    MQUEUE_HOOKS = {
     "redis": {
