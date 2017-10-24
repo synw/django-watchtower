@@ -3,7 +3,6 @@
 import time
 import json
 from watchtower.models import Hit
-from watchtower.conf import VERBOSITY
 
 
 def convertBool(val):
@@ -15,13 +14,12 @@ def convertBool(val):
         return False
 
 
-def write(db, hits):
-    global VERBOSITY
+def write(db, hits, verbosity=0):
     i = len(hits)
     hit_objs = []
     for hit in hits:
-        if VERBOSITY > 0 and i > 0:
-            if VERBOSITY > 1:
+        if verbosity > 0 and i > 0:
+            if verbosity > 2:
                 print(json.dumps(hit, indent=2))
         hit_obj = Hit(
             path=hit["path"],
@@ -57,5 +55,10 @@ def write(db, hits):
             city=hit["geo"]["city"]
         )
         hit_objs.append(hit_obj)
+    if verbosity == 1:
+        if i > 0:
+            print(i, "hits")
+    elif verbosity > 1:
+        print(i, "hits")
     Hit.objects.using(db).bulk_create(hit_objs)
     return i

@@ -3,13 +3,11 @@
 import json
 import time
 import redis
-from watchtower.conf import SITE_SLUG, VERBOSITY, DBS
+from watchtower.conf import SITE_SLUG, DBS
 from watchtower.serializer import decodeHitRow, decodeEventRow
 
 
 def getHits(r):
-    global SITE_SLUG
-    global VERBOSITY
     prefix = SITE_SLUG + "_hit*"
     hits = []
     for key in r.scan_iter(prefix):
@@ -22,7 +20,6 @@ def getHits(r):
 
 def getEvents(r):
     global SITE_SLUG
-    global VERBOSITY
     prefix = SITE_SLUG + "_event*"
     events = []
     for key in r.scan_iter(prefix):

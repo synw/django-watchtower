@@ -20,7 +20,7 @@ VERBOSITY = getattr(settings, 'WT_VERBOSITY', 0)
 
 STOP = getattr(settings, 'WT_STOP', False)
 
-EXCLUDE = getattr(settings, 'WT_EXCLUDE', [])
+EXCLUDE = getattr(settings, 'WT_EXCLUDE', ["/admin/jsi18n/"])
 
 COLLECTOR = getattr(settings, 'WT_COLLECTOR', True)
 

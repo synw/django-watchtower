@@ -4,10 +4,10 @@ from __future__ import print_function
 import time
 from django.conf import settings
 from watchtower.db import orm, influx
-from watchtower.conf import DBS, VERBOSITY
+from watchtower.conf import DBS
 
 
-def dispatch(hits, events=None):
+def dispatch(hits, events=None, verbosity=0):
     global DBS
     for key in DBS:
         db = DBS[key]
@@ -17,18 +17,17 @@ def dispatch(hits, events=None):
                     djdb = db["hits_db"]
                 except:
                     print("Database ", db, "not found")
-                orm.write(djdb, hits)
+                orm.write(djdb, hits, verbosity)
             elif db["type"] == "influxdb":
                 influx.process_hits(hits)
                 if events is not None:
                     influx.process_events(events)
-                    print_summary(num_events=len(events))
+                    print_summary(num_events=len(events), verbosity=verbosity)
     print_summary(num_hits=len(hits))
 
 
-def print_summary(num_hits=0, num_events=0):
-    global VERBOSITY
-    if VERBOSITY > 0:
+def print_summary(num_hits=0, num_events=0, verbosity=0):
+    if verbosity > 0:
         if num_hits > 0:
             s = "s"
             if num_hits == 1:

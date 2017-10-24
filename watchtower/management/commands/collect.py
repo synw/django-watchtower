@@ -13,13 +13,14 @@ class Command(BaseCommand):
     help = 'Start Watchtower collector'
 
     def handle(self, *args, **options):
-        global VERBOSITY
-        global FREQUENCY
-        if VERBOSITY > 0:
+        verbosity = options["verbosity"]
+        if verbosity is None:
+            verbosity = VERBOSITY
+        if verbosity > 0:
             print("Collecting data ...")
         r = redis.Redis(host='localhost', port=6379, db=0)
         while True:
             hits = getHits(r)
             events = getEvents(r)
-            dispatch(hits, events)
+            dispatch(hits, events, verbosity)
             time.sleep(FREQUENCY)
