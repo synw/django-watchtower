@@ -111,11 +111,11 @@ class HitsMiddleware(MiddlewareMixin):
         }
         data["ua"] = ua
         name = CONF.SITE_SLUG + "_hit" + str(HITNUM)
+        data["geo"] = serializer.getGeoData(data['ip'])
         if CONF.COLLECTOR is True:
             hit = serializer.pack(data)
             R.set(name, hit)
         else:
-            data["geo"] = serializer.getGeoData(data['ip'])
             thread = Thread(target=dispatch, args=([data],))
             thread.start()
         HITNUM += 1
