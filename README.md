@@ -89,7 +89,7 @@ Add to settings.py:
     # required: at least one database
     "default": {
         "type": "django",
-        "hits": "hits" # name of a DATABASE in settings
+        "hits_db": "hits" # name of a DATABASE in settings
     },
    # defaults:
    WT_REDIS = {
