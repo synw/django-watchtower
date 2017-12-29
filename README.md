@@ -5,17 +5,10 @@ Collect metrics and events from Django.
 How it works: numbers taken out from Django are stored in Redis and a collector saves them in some
 database(s)
 
-**Metrics**: each hit is saved with fields ip, request time, query time, user_agent, geographical information and 
-[more](#collected-data)
+**Metrics**: each hit is saved with fields ip, request time, query time, user_agent, geographical information and [more](#collected-data)
 
 **Events**: logs, actions on registered models and user defined events are stored 
 (with [django-mqueue](https://github.com/synw/django-mqueue))
-
-## Supported databases
-
-- [x] Django databases
-- [x] Influxdb
-- [ ] Rethinkdb
 
 ## Install
 
@@ -98,25 +91,12 @@ Add to settings.py:
         "type": "django",
         "hits_db": "hits" # name of a DATABASE in settings
     },
-    # optional: more databases
-    "timeseries": {
-        "type": "influxdb",
-        "host": "localhost",
-        "port": 8086,
-        "user": "admin",
-        "password": "admin",
-        "hits_db": "hits",
-        "events_db": "events",
-    }
-   }
    # defaults:
    WT_REDIS = {
     "addr": "localhost:6379",
     "db": 0
    }
    ```
-
-Create your Influxdb databases for hits and events if needed
 
 Options to exclude certain paths from hits recording:
 
@@ -135,7 +115,7 @@ Note: it is possible to save the data directly into the database not using Redis
    WT_COLLECTOR = False
    ```
 
-Do not use in production: it will not work when `DEBUG` is `False`
+Do not use this setting in production: it will not work when `DEBUG` is `False`
 
 # Collected data
 
