@@ -50,7 +50,7 @@ class HitsMiddleware(MiddlewareMixin):
         doc_size = 0
         try:
             doc_size = len(response.content)
-        except:
+        except Exception:
             pass
         total_time = 0
         for query in connection.queries:
@@ -81,7 +81,7 @@ class HitsMiddleware(MiddlewareMixin):
                 is_staff = "true"
             if request.user.is_superuser:
                 is_superuser = "true"
-        request.time = 0
+        request_time = 0
         if hasattr(request, '_start_time'):
             request_time = int((time.time() - request._start_time) * 1000)
         data["is_superuser"] = is_superuser
@@ -89,8 +89,14 @@ class HitsMiddleware(MiddlewareMixin):
         data["is_authenticated"] = is_authenticated
         data["ajax"] = request.is_ajax()
         data["request_time"] = request_time
-        data["view"] = request._view_name
-        data["module"] = request._view_module
+        try:
+            data["view"] = request._view_name
+        except Exception:
+            data["view"] = ""
+        try:
+            data["module"] = request._view_module
+        except Exception:
+            data["module"] = ""
         data["status_code"] = response.status_code
         data["reason_phrase"] = response.reason_phrase
         data["doc_size"] = doc_size
