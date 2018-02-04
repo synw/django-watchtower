@@ -26,10 +26,10 @@ Unzip and add to settings.py:
    GEOIP_PATH = "/my/geo/folder"
    ```
 
-Install the dependencies: 
+Install: 
 
    ```bash
-   pip install redis influxdb geoip2 django-user-agents django-mqueue
+   pip install django-watchtower
    ```
 
 [Configure mqueue](http://django-mqueue.readthedocs.io/en/latest/usage/registered_models.html) to record what you want
