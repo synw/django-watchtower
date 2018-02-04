@@ -1,0 +1,3 @@
+recursive-include watchtower/migrations *
+recursive-include watchtower/db *
+recursive-include watchtower/management *
