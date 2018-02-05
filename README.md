@@ -74,16 +74,7 @@ Add to settings.py:
    
    # required
    SITE_SLUG = "mysite"
-   
-   # to pipe events into watchtower
-   MQUEUE_HOOKS = {
-    "redis": {
-        "path": "mqueue.hooks.redis",
-        "host": "localhost",
-        "port": 6379,
-        "db": 0,
-    }
-   }
+  
    # set the databases to use
    WT_DATABASES = {
     # required: at least one database
@@ -91,6 +82,7 @@ Add to settings.py:
         "type": "django",
         "hits_db": "hits" # name of a DATABASE in settings
     },
+   
    # defaults:
    WT_REDIS = {
     "addr": "localhost:6379",
@@ -103,6 +95,13 @@ Options to exclude certain paths from hits recording:
    ```python
    WT_EXCLUDE = ("/path/not/recorded/",)
    ```
+   
+Make the migrations:
+
+   ```
+   python3 manage.py migrate watchtower --database=hits
+   ```
+
 # Run the collector
 
    ```python
