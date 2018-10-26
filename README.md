@@ -1,11 +1,12 @@
 # Django Watchtower
 
-Collect metrics and events from Django.
+Collect hits metrics from Django.
 
 How it works: numbers taken out from Django are stored in Redis and a collector saves them in some
 database(s)
 
-**Metrics**: each hit is saved with fields ip, request time, query time, user_agent, geographical information and [more](#collected-data)
+**Metrics**: each hit is saved with fields ip, request time, query time, user_agent, geographical 
+information and [more](#collected-data)
 
 ## Install
 
@@ -107,6 +108,7 @@ Change the default collector save interval:
 
    ```python
    WT_FREQUENCY = 30
+   ```
 
 # Run the collector
 
