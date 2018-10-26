@@ -1,5 +1,3 @@
 redis
-influxdb
 geoip2
 django-user-agents
-django-mqueue
