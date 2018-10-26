@@ -1,6 +1,5 @@
 from setuptools import setup, find_packages
 
-
 version = __import__('watchtower').__version__
 
 setup(
@@ -23,10 +22,8 @@ setup(
     ],
     install_requires=[
         "redis",
-        "influxdb",
         "geoip2",
         "django-user-agents",
-        "django-mqueue",
     ],
     zip_safe=False
 )
