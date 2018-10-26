@@ -12,7 +12,6 @@ try:
 except ImportError:
     MiddlewareMixin = object
 
-
 R = redis.StrictRedis(
     host=CONF.REDIS["host"], port=CONF.REDIS["port"], db=CONF.REDIS["db"])
 
