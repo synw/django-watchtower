@@ -7,9 +7,6 @@ database(s)
 
 **Metrics**: each hit is saved with fields ip, request time, query time, user_agent, geographical information and [more](#collected-data)
 
-**Events**: logs, actions on registered models and user defined events are stored 
-(with [django-mqueue](https://github.com/synw/django-mqueue))
-
 ## Install
 
 Install the GeoIp tools:
@@ -32,8 +29,6 @@ Install:
    pip install django-watchtower
    ```
 
-[Configure mqueue](http://django-mqueue.readthedocs.io/en/latest/usage/registered_models.html) to record what you want
-
 Add to installed apps:
 
    ```python
@@ -51,7 +46,7 @@ Add the middlewares:
     # ... other middlewares
    )
    ```
-   
+
 Set the Django databases:
 
    ```python
@@ -105,9 +100,9 @@ Exclude certain paths from hits recording:
    # default:
    # ["/admin/jsi18n/", "/media/"]
    ```
-   
+
 Note: this will exclude all paths that start with the provided values
-   
+
 Change the default collector save interval:
 
    ```python
