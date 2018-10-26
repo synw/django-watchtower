@@ -4,12 +4,10 @@ import json
 from django.contrib.gis.geoip2 import GeoIP2
 from watchtower.conf import SITE_SLUG, SEPARATOR
 
-
 G = GeoIP2()
 
 
 def pack(data):
-    global SITE_SLUG
     global G
     sep = "#!#"
     h = (
@@ -54,7 +52,6 @@ def getGeoData(ip):
 
 
 def decodeEventRow(row):
-    global SEPARATOR
     row = row.decode("utf-8")
     event = {}
     for el in row.split(SEPARATOR):
@@ -66,7 +63,6 @@ def decodeEventRow(row):
 
 
 def decodeHitRow(row):
-    global SEPARATOR
     global G
     vals = row.decode().split(SEPARATOR)
     data = {}

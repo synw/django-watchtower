@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
-
 redis_conf = {
     "host": "localhost",
     "port": 6379,
@@ -27,9 +26,3 @@ COLLECTOR = getattr(settings, 'WT_COLLECTOR', True)
 DBS = getattr(settings, 'WT_DATABASES', None)
 if DBS is None:
     raise ImproperlyConfigured("Please configure a database for Watchtower")
-
-INFLUX = None
-for k in DBS:
-    db = DBS[k]
-    if db["type"] == "influxdb":
-        INFLUX = db
