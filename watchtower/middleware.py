@@ -44,8 +44,9 @@ class HitsMiddleware(MiddlewareMixin):
             return response
         data = {}
         data["path"] = request.path_info
-        if data["path"] in CONF.EXCLUDE:
-            return response
+        for expath in CONF.EXCLUDE:
+            if data["path"].startswith(expath):
+                return response
         doc_size = 0
         try:
             doc_size = len(response.content)
