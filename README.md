@@ -89,18 +89,29 @@ Add to settings.py:
     "db": 0
    }
    ```
-
-Options to exclude certain paths from hits recording:
-
-   ```python
-   WT_EXCLUDE = ("/path/not/recorded/",)
-   ```
    
 Make the migrations:
 
    ```
    python3 manage.py migrate watchtower --database=hits
    ```
+   
+### Additional settings
+
+Exclude certain paths from hits recording:
+
+   ```python
+   WT_EXCLUDE = ["/path/not/recorded/"]
+   # default:
+   # ["/admin/jsi18n/", "/media/"]
+   ```
+   
+Note: this will exclude all paths that start with the provided values
+   
+Change the default collector save interval:
+
+   ```python
+   WT_FREQUENCY = 30
 
 # Run the collector
 
