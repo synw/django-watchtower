@@ -70,12 +70,12 @@ class HitsMiddleware(MiddlewareMixin):
             data['referer'] = request.META['HTTP_REFERER']
         data['user'] = 'Anonymous'
         is_authenticated = "false"
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             is_authenticated = "true"
             data['user'] = request.user.username
         is_staff = "false"
         is_superuser = "false"
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             is_authenticated = "true"
             if request.user.is_staff:
                 is_staff = "true"
