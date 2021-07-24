@@ -18,7 +18,6 @@ Add to installed apps:
 
    ```python
    "django_user_agents",
-   "mqueue",
    "watchtower",
    ```
 
@@ -26,9 +25,9 @@ Add the middlewares:
 
    ```python
    MIDDLEWARE_CLASSES = (
+      # ... other middlewares
     'django_user_agents.middleware.UserAgentMiddleware',
     'watchtower.middleware.HitsMiddleware',
-    # ... other middlewares
    )
    ```
 
@@ -36,10 +35,7 @@ Set the Django databases:
 
    ```python
    DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    },
+    'default': # ...,
     'hits': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'hits.sqlite3'),
@@ -55,7 +51,7 @@ Add to settings.py:
    # required
    SITE_SLUG = "mysite"
   
-   # set the databases to use
+   # set the databases to use: required
    WT_DATABASES = {
     # required: at least one database
     "default": {
@@ -70,14 +66,8 @@ Add to settings.py:
    }
    ```
 
-Install the GeoIp tools (optional):
+Install the GeoIp tools (optional): [get the geoip database](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data)
 
-   ```bash
-   cd /my/geo/folder
-   wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
-   wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
-   ```
-   
 Unzip and add to settings.py:
 
    ```python
