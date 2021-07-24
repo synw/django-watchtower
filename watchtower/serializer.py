@@ -1,10 +1,11 @@
-# -*- coding: utf-8 -*-
-
 import json
-from django.contrib.gis.geoip2 import GeoIP2
 from watchtower.conf import SITE_SLUG, SEPARATOR
-
-G = GeoIP2()
+G = None
+try:
+    from django.contrib.gis.geoip2 import GeoIP2
+    G = GeoIP2()
+except ImportError:
+    pass
 
 
 def pack(data):
@@ -46,7 +47,7 @@ def getGeoData(ip):
         "country_code": "",
         "region": ""
     }
-    if ip.startswith("127.") is False and ip.startswith("192.") is False:
+    if ip.startswith("127.") is False and ip.startswith("192.") is False and G is not None:
         geo = G.city(ip)
     return geo
 
@@ -63,7 +64,6 @@ def decodeEventRow(row):
 
 
 def decodeHitRow(row):
-    global G
     vals = row.decode().split(SEPARATOR)
     data = {}
     data["site"] = vals[0]
